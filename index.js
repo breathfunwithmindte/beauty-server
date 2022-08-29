@@ -14,18 +14,44 @@ app.get("/", (req, res) => {
 
 console.log("hello world")
 
-
+function random(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+  }
 
 app.get("/api/v1/stores/:id", (req, res) => {
+    const text = ["Εξαιρετική δουλειά όπως πάντα! Δεν το αλλάζω!!!", "Ικανοποιητικό αποτέλεσμα", "Φοβερό.. Μπραβο στα παιδια", "Φοβερό.. Lets gooo !!"]
+    const names = ["Νάνσυ", "Μαριεύα", "Mike", "Ελενα", "Ντέιβις"]
+    const services = ["Μανικιούρ", "Πεντικιούρ", "Κούρεμα", "Βάψιμο", "Αποτρίχωση "]
+    let reviews = []
+    for (let i = 0; i < random(100, 400); i++) {
+        reviews.push({
+            user: { username: "Nancy M." }, review: text[random(0, 3)], rating: random(2, 5)
+        })
+    }
 
-    // todo -> prepare the availability of the store;
+    let images_store = ["/public/stores/0.jpg", "/public/stores/1.jpg", "/public/stores/2.jpg"]
+    let images = []
+    for (let i = 0; i < random(2, 8); i++) {
+        images.push(images_store[random(0,2)])
+    }
 
+    let users = []
+    for (let i = 0; i < random(2, 8); i++) {
+        users.push({
+            username: names[random(0, 4)], 
+            rating: random(0, 5), 
+            services: [services[random(0, 4)], services[random(0, 4)], services[random(0, 4)], services[random(0, 4)]], 
+            experience: random(1, 10),
+            followers: random(500, 2500)
+        })
+    }
 
     res.status(200).json({
         message: "ok",
         document: {
             user: "some mongodbid",
             name: "testone",
+            images: images,
             avatar: "/public/images/0.jpeg",
             cover: "/public/images/00.jpg",
             title: "Testone Beauty salon here 01",
@@ -33,6 +59,7 @@ app.get("/api/v1/stores/:id", (req, res) => {
             policy: "Θα μπορείς να ακυρώσεις την κράτησή σου έως και 3 ώρες πριν από το ραντεβού σου. Αν έχεις πληρώσει online, θα λάβεις πίστωση Uala στο πορτοφόλι σου",
             location_address: "Αγία Παρασκευή",
             services: [],
+            employers: users,
             products: [
                 { title: "Αποτρίχωση άνω χείλος", category: "ΑΠΟΤΡΙΧΩΣΗ", description: "aποτρίχωση άνω χείλος", time_required: "15min" },
                 { title: "Αποτρίχωση κοιλιάς", category: "ΑΠΟΤΡΙΧΩΣΗ", description: "Αποτρίχωση με κερί στην περιοχή της κοιλιάς.", time_required: "15min" },
@@ -61,9 +88,9 @@ app.get("/api/v1/stores/:id", (req, res) => {
                 { title: "Αποτρίχωση χέρια ΧΕΡΙΑ", category: "ΧΕΡΙΑ", description: "Αποτρίχωση φρύδια με κλωστή - τσιμπιδάκι", time_required: "15min" }
             ],
             categories: ["ΑΠΟΤΡΙΧΩΣΗ", "ΠΡΟΣΩΠΟ", "ΠΟΔΙΑ", "ΦΟΡΜΑΡΙΣΜΑ", "ΧΕΡΙΑ"],
-            employers: [],
+            review_list: reviews,
             review: 4.4,
-            total_reviews: 256
+            total_reviews: reviews.length
         }
     })
 })
